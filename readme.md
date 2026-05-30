@@ -13,6 +13,7 @@ Este repositorio contiene una serie de ejercicios prácticos para aprender y dom
 - [Taller 13: Clases Abstractas e Interfaces - Ejercicios Combinados](#taller-13-clases-abstractas-e-interfaces---ejercicios-combinados)
 - [Taller 14: Polimorfismo - Ejercicios Avanzados](#taller-14-polimorfismo---ejercicios-avanzados)
 - [Taller 15: Principio de Responsabilidad Única (SRP)](#taller-15-principio-de-responsabilidad-única-srp)
+- [Taller 16: Principio de Abierto/Cerrado (OCP)](#taller-16-principio-de-abiertocerrado-ocp)
 
 ---
 
@@ -252,6 +253,32 @@ Este repositorio contiene una serie de ejercicios prácticos para aprender y dom
     - `ValidadorUsuario`: Responsable de validar email, contraseña, etc.
     - `AutenticacionService`: Responsable de verificar credenciales.
 - **Aprendizaje:** Separar las reglas de negocio (validaciones) de la lógica de seguridad (autenticación) hace el código más modular y seguro.
+
+---
+## Taller 16: Principio de Abierto/Cerrado (OCP)
+
+### Definición Formal del OCP
+> "Las entidades de software (clases, módulos, funciones, etc.) deben estar abiertas para la extensión, pero cerradas para la modificación."
+
+**Analogía:** Construir una casa con una estructura sólida. Para hacer mejoras o agregar una habitación, no se destruye una pared estructural, sino que se construye una nueva habitación anexa (extensión). En software, se deben poder agregar nuevas funcionalidades sin alterar el código que ya funciona, utilizando herencia y polimorfismo.
+
+### Beneficios del OCP
+| Beneficio | Descripción |
+|-----------|-------------|
+| **Facilita el Mantenimiento** | Agregar nuevas características sin modificar código existente minimiza el riesgo de errores. |
+| **Permite la Evolución del Código** | Los requisitos cambian con el tiempo; el OCP facilita el crecimiento seguro del sistema. |
+| **Mayor Reusabilidad** | Clases extensibles mediante herencia o interfaces son más reutilizables en diferentes contextos. |
+
+### Desventajas del OCP
+| Desventaja | Descripción |
+|------------|-------------|
+| **Complejidad Inicial** | Requiere planificación y diseño inicial más complejo (herencia, composición, interfaces). |
+| **Aumento de Clases** | Puede llevar a la creación de múltiples clases, difíciles de gestionar sin una estructura clara. |
+
+### Conceptos Relacionados que se Deben Dominar
+- **Herencia:** Capacidad de una clase para heredar las características de otra clase.
+- **Polimorfismo:** Capacidad de diferentes clases para implementar métodos con la misma firma de diferentes maneras.
+- **Abstracción:** Definición de una clase base o interfaz que define un comportamiento común sin especificar detalles de implementación.
 
 ---
 
