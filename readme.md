@@ -14,6 +14,9 @@ Este repositorio contiene una serie de ejercicios prácticos para aprender y dom
 - [Taller 14: Polimorfismo - Ejercicios Avanzados](#taller-14-polimorfismo---ejercicios-avanzados)
 - [Taller 15: Principio de Responsabilidad Única (SRP)](#taller-15-principio-de-responsabilidad-única-srp)
 - [Taller 16: Principio de Abierto/Cerrado (OCP)](#taller-16-principio-de-abiertocerrado-ocp)
+- [Taller 17: Principio de Sustitución de Liskov (LSP)](#taller-17-principio-de-sustitución-de-liskov-lsp)
+- [Taller 18: Principio de Segregación de Interfaces (ISP)](#taller-18-principio-de-segregación-de-interfaces-isp)
+- [Taller 19: Principio de Inversión de Dependencias (DIP)](#taller-19-principio-de-inversión-de-dependencias-dip)
 
 ---
 
@@ -255,12 +258,38 @@ Este repositorio contiene una serie de ejercicios prácticos para aprender y dom
 - **Aprendizaje:** Separar las reglas de negocio (validaciones) de la lógica de seguridad (autenticación) hace el código más modular y seguro.
 
 ---
+
 ## Taller 16: Principio de Abierto/Cerrado (OCP)
 
 ### Definición Formal del OCP
 > "Las entidades de software (clases, módulos, funciones, etc.) deben estar abiertas para la extensión, pero cerradas para la modificación."
 
 **Analogía:** Construir una casa con una estructura sólida. Para hacer mejoras o agregar una habitación, no se destruye una pared estructural, sino que se construye una nueva habitación anexa (extensión). En software, se deben poder agregar nuevas funcionalidades sin alterar el código que ya funciona, utilizando herencia y polimorfismo.
+
+### Ejercicio 1: Sistema de Descuento para Tienda
+- **Conceptos:** OCP aplicado a estrategias de descuento.
+- **Clase base:** `Descuento` (abstracta con método `aplicar()`).
+- **Extensiones:** `DescuentoPorcentaje`, `DescuentoFijo`, `DescuentoPorVolumen`, `DescuentoCompuesto`.
+- **Aprendizaje:**
+    - La clase base está abierta para extensión pero cerrada para modificación.
+    - Nuevos tipos de descuento se agregan creando nuevas clases, no modificando las existentes.
+    - El polimorfismo permite usar cualquier descuento de manera intercambiable.
+
+### Ejercicio 2: Gestión de Documentos con Diferentes Formatos
+- **Conceptos:** OCP aplicado a exportación de documentos.
+- **Interfaz:** `Exportador` (con método `exportar()`).
+- **Implementaciones:** `ExportadorPDF`, `ExportadorWord`, `ExportadorExcel`, `ExportadorHTML`.
+- **Aprendizaje:**
+    - El `GestorDocumentos` depende de la abstracción `Exportador`.
+    - Agregar un nuevo formato no requiere modificar el gestor ni las exportaciones existentes.
+
+### Ejercicio 3: Sistema de Envío de Mensajes
+- **Conceptos:** OCP aplicado a canales de comunicación.
+- **Interfaz:** `CanalMensaje` (con método `enviar()`).
+- **Implementaciones:** `CanalEmail`, `CanalPushNotification`, `CanalWhatsApp`.
+- **Aprendizaje:**
+    - El `ServicioMensajeria` puede enviar mensajes a través de cualquier canal.
+    - Nuevos canales se agregan sin modificar el servicio de mensajería.
 
 ### Beneficios del OCP
 | Beneficio | Descripción |
@@ -275,10 +304,160 @@ Este repositorio contiene una serie de ejercicios prácticos para aprender y dom
 | **Complejidad Inicial** | Requiere planificación y diseño inicial más complejo (herencia, composición, interfaces). |
 | **Aumento de Clases** | Puede llevar a la creación de múltiples clases, difíciles de gestionar sin una estructura clara. |
 
-### Conceptos Relacionados que se Deben Dominar
-- **Herencia:** Capacidad de una clase para heredar las características de otra clase.
-- **Polimorfismo:** Capacidad de diferentes clases para implementar métodos con la misma firma de diferentes maneras.
-- **Abstracción:** Definición de una clase base o interfaz que define un comportamiento común sin especificar detalles de implementación.
+---
+
+## Taller 17: Principio de Sustitución de Liskov (LSP)
+
+### Definición Formal del LSP
+> "Si para cada objeto o1 de tipo S, existe un objeto o2 de tipo T tal que, para todos los programas P definidos en términos de T, el comportamiento de P no cambia al sustituir o1 por o2, entonces S es un subtipo de T."
+
+**Analogía:** En un equipo de trabajo, un nuevo líder (clase derivada) debe poder realizar las mismas tareas que el líder original (clase base) sin causar problemas en el equipo. Si el nuevo líder no puede hacer esas tareas, la sustitución falla.
+
+### Ejercicio 1: Sistema de Figuras Geométricas
+- **Conceptos:** Clases derivadas que respetan el contrato de la clase base.
+- **Clases:** `Figura` (abstracta con `area()`), `Rectangulo`, `Circulo`.
+- **Aprendizaje:**
+    - Las clases derivadas pueden sustituir a la clase base sin alterar el comportamiento.
+    - Cada figura calcula su área según su fórmula, pero todas respetan el contrato.
+
+### Ejercicio 2: Sistema de Cuentas Bancarias
+- **Conceptos:** Extensiones con reglas adicionales sin romper el contrato.
+- **Clases:** `CuentaBancaria` (base), `CuentaAhorros` (derivada con límite de retiros).
+- **Aprendizaje:**
+    - `CuentaAhorros` puede usarse donde se espere una `CuentaBancaria`.
+    - Las reglas adicionales (límite de retiros) no violan el comportamiento esperado.
+    - Se respeta el mismo tipo de excepción (`SaldoInsuficienteException`).
+
+### Ejercicio 3: Refactorización de Clases de Transporte
+- **Conceptos:** Comportamientos específicos pero coherentes.
+- **Clases:** `Transporte` (base), `Coche`, `Bicicleta`.
+- **Aprendizaje:**
+    - `Coche` y `Bicicleta` pueden sustituir a `Transporte` sin problemas.
+    - Métodos adicionales (`cambiarMarcha()`, `saltar()`) no afectan la sustituibilidad.
+    - No se lanzan excepciones inesperadas en los métodos heredados.
+
+### Beneficios del LSP
+| Beneficio | Descripción |
+|-----------|-------------|
+| **Permite el Uso del Polimorfismo** | Las clases derivadas se pueden usar indistintamente con sus clases base. |
+| **Mejora la Extensibilidad** | Las clases derivadas mantienen un comportamiento coherente con la clase base. |
+| **Facilita la Reutilización** | Las clases derivadas reutilizan el código de la clase base sin modificar su comportamiento esperado. |
+
+### Violaciones Comunes del LSP (Qué evitar)
+| Violación | Problema | Solución |
+|-----------|----------|----------|
+| `Cuadrado extends Rectangulo` | Cambiar el ancho también cambia el alto | Usar una interfaz común `Figura` |
+| Lanzar excepciones no declaradas | Comportamiento inesperado | Respetar el contrato de la clase base |
+| Condiciones previas más estrictas | La subclase rechaza entradas válidas | Mantener condiciones iguales o más flexibles |
+
+---
+
+## Taller 18: Principio de Segregación de Interfaces (ISP)
+
+### Definición Formal del ISP
+> "Los clientes no deben ser forzados a depender de interfaces que no utilizan."
+
+**Analogía:** En un restaurante, no tendría sentido exigirle al cocinero que limpie las mesas ni al camarero que cocine los platos. Cada empleado debe cumplir con las tareas que corresponden a su rol (interfaces específicas).
+
+### Ejercicio 1: Sistema de Mantenimiento
+- **Conceptos:** Separación de responsabilidades en interfaces.
+- **Interfaz original (violación):** `Mantenimiento` (reparar + limpiar).
+- **Interfaces segregadas:** `Reparable`, `Limpiable`.
+- **Clases:** `Mecanico` (implementa `Reparable`), `PersonalLimpieza` (implementa `Limpiable`), `TecnicoEspecializado` (implementa ambas).
+- **Aprendizaje:**
+    - Una clase no debe implementar métodos que no necesita.
+    - Interfaces pequeñas y específicas aumentan la cohesión.
+    - Una clase puede implementar múltiples interfaces pequeñas.
+
+### Ejercicio 2: Sistema de Operaciones Bancarias
+- **Conceptos:** Segregación por tipo de operación bancaria.
+- **Interfaz original (violación):** `OperacionBancaria` (transferir + retirar + pagar facturas).
+- **Interfaces segregadas:** `Transferible`, `Retirable`, `PagableFacturas`.
+- **Clases:** `CuentaBasica` (solo `Retirable`), `CuentaAhorros` (`Retirable` + `PagableFacturas`), `CuentaCorriente` (todas).
+- **Aprendizaje:**
+    - No todas las cuentas bancarias soportan todas las operaciones.
+    - Clientes especializados (`CajeroAutomatico`, `BancaEnLinea`, `PortalPagos`) dependen solo de lo que necesitan.
+
+### Ejercicio 3: Gestión de Vehículos
+- **Conceptos:** Separación de conducción y carga.
+- **Interfaz original (violación):** `Vehiculo` (conducir + cargar mercancías).
+- **Interfaces segregadas:** `Conducible`, `Cargable`.
+- **Clases:** `Moto` (solo `Conducible`), `AutoDeportivo` (solo `Conducible`), `Camion` (ambas), `Camioneta` (ambas).
+- **Aprendizaje:**
+    - No todos los vehículos pueden cargar mercancías.
+    - Vehículos de carga implementan `Cargable`; vehículos de pasajeros no.
+    - Un vehículo puede tener múltiples roles implementando varias interfaces.
+
+### Beneficios del ISP
+| Beneficio | Descripción |
+|-----------|-------------|
+| **Reduce el Acoplamiento** | Las clases dependen solo de los métodos que realmente utilizan. |
+| **Facilita el Mantenimiento** | Cambios en una interfaz afectan solo a las clases relevantes. |
+| **Permite la Reutilización** | Interfaces específicas se pueden reutilizar en diferentes contextos. |
+
+### Violaciones Comunes del ISP (Qué evitar)
+| Violación | Problema | Solución |
+|-----------|----------|----------|
+| Interfaces "gordas" con muchos métodos | Clases implementan métodos vacíos o lanzan excepciones | Dividir en interfaces más pequeñas |
+| Métodos que no aplican a todas las implementaciones | Código muerto o confuso | Crear interfaces específicas por responsabilidad |
+| Forzar a una clase a depender de lo que no usa | Alto acoplamiento innecesario | Diseñar interfaces orientadas al cliente |
+
+---
+
+## Taller 19: Principio de Inversión de Dependencias (DIP)
+
+### Definición Formal del DIP
+> "Los módulos de alto nivel no deben depender de módulos de bajo nivel; ambos deben depender de abstracciones. Las abstracciones no deben depender de los detalles; los detalles deben depender de las abstracciones."
+
+**Analogía:** En un restaurante, los gerentes (módulos de alto nivel) no deberían preocuparse por cómo los cocineros (módulos de bajo nivel) preparan cada plato. Solo deben definir los estándares (interfaces) que los cocineros deben seguir.
+
+### Ejercicio 1: Sistema de Autenticación
+- **Conceptos:** Inversión de dependencias aplicada a autenticación.
+- **Abstracción:** `ServicioAutenticacion` (interfaz con método `autenticar()`).
+- **Implementaciones:** `AutenticacionLocal`, `AutenticacionOAuth`.
+- **Cliente:** `GestorAutenticacion` (depende de la abstracción, no de las concretas).
+- **Aprendizaje:**
+    - El gestor no sabe si usa autenticación local u OAuth.
+    - Se puede cambiar el método de autenticación sin modificar el gestor.
+    - Inyección de dependencias por constructor.
+
+### Ejercicio 2: Sistema de Almacenamiento de Archivos
+- **Conceptos:** DIP aplicado a persistencia.
+- **Abstracción:** `Almacenamiento` (interfaz con métodos `guardarArchivo()`, `recuperarArchivo()`, etc.).
+- **Implementaciones:** `AlmacenamientoLocal`, `AlmacenamientoNube`.
+- **Cliente:** `GestorArchivos` (depende de la abstracción `Almacenamiento`).
+- **Aprendizaje:**
+    - El gestor puede trabajar con almacenamiento local o en la nube indistintamente.
+    - Cambiar la estrategia de almacenamiento no requiere modificar el gestor.
+
+### Ejercicio 3: Sistema de Reportes
+- **Conceptos:** DIP aplicado a generación de formatos.
+- **Abstracción:** `GeneradorReporte` (interfaz con método `generar()`).
+- **Implementaciones:** `ReportePDF`, `ReporteExcel`, `ReporteHTML`.
+- **Cliente:** `GestorReportes` (depende de la abstracción `GeneradorReporte`).
+- **Aprendizaje:**
+    - El gestor puede generar PDF, Excel o HTML sin cambios en su código.
+    - Nuevos formatos se agregan creando nuevas implementaciones de la interfaz.
+
+### Beneficios del DIP
+| Beneficio | Descripción |
+|-----------|-------------|
+| **Aumenta la Flexibilidad** | Depender de abstracciones permite cambiar implementaciones fácilmente. |
+| **Fomenta la Reusabilidad** | Las abstracciones permiten crear componentes reutilizables en diferentes contextos. |
+| **Reduce el Acoplamiento** | Se minimizan las dependencias directas entre módulos de alto y bajo nivel. |
+
+### Desventajas del DIP
+| Desventaja | Descripción |
+|------------|-------------|
+| **Mayor Complejidad Inicial** | Requiere un diseño más sofisticado con interfaces o clases abstractas. |
+| **Incremento del Número de Abstracciones** | Puede aumentar la cantidad de código (interfaces adicionales). |
+
+### Patrón de Inyección de Dependencias
+| Tipo de Inyección | Ejemplo | Cuándo usarlo |
+|-------------------|---------|---------------|
+| **Constructor** | `new Gestor(new Implementacion())` | Dependencias obligatorias (recomendado) |
+| **Setter** | `gestor.setServicio(implementacion)` | Dependencias opcionales o que pueden cambiar |
+| **Método** | `gestor.procesar(implementacion)` | Dependencias que varían por llamada |
 
 ---
 
@@ -297,10 +476,29 @@ Este repositorio contiene una serie de ejercicios prácticos para aprender y dom
 
 ## Resumen de Buenas Prácticas Destacadas
 
+### Fundamentos POO
 - **Encapsulamiento:** Hacer los atributos `private` y proporcionar getters/setters con validación.
 - **Herencia:** Usar `super()` en el constructor de la subclase. Preferir `protected` sobre `private` si se espera herencia.
 - **Sobrescritura:** Siempre usar la anotación `@Override`. No reducir la visibilidad del método. Solo sobrescribir si se va a cambiar o extender el comportamiento.
 - **Polimorfismo:** Programar usando tipos abstractos (clases base o interfaces) para mayor flexibilidad.
 - **Clases Abstractas:** Usarlas cuando se tiene una base común con comportamiento que las subclases deben implementar de forma diferente.
 - **Interfaces:** Usarlas para definir capacidades o roles que una clase puede cumplir, permitiendo herencia múltiple de tipo.
+
+### Principios SOLID
 - **SRP (Single Responsibility Principle):** Una clase debe tener una sola razón para cambiar. Separar datos, lógica de negocio, persistencia y presentación en clases diferentes.
+- **OCP (Open/Closed Principle):** Las clases deben estar abiertas para extensión pero cerradas para modificación. Usar herencia e interfaces para agregar nuevas funcionalidades.
+- **LSP (Liskov Substitution Principle):** Las clases derivadas deben poder sustituir a sus clases base sin alterar el comportamiento del programa. Evitar herencias forzadas como `Cuadrado extends Rectangulo`.
+- **ISP (Interface Segregation Principle):** Los clientes no deben depender de interfaces que no utilizan. Preferir varias interfaces pequeñas y específicas sobre una sola interfaz general.
+- **DIP (Dependency Inversion Principle):** Los módulos de alto nivel no deben depender de módulos de bajo nivel. Ambos deben depender de abstracciones. Usar inyección de dependencias.
+
+---
+
+## Resumen de los Talleres SOLID
+
+| Taller | Principio | Analogía | Ejercicios Clave |
+|--------|-----------|----------|------------------|
+| 15 | SRP | Un empleado con múltiples roles incompatibles | `Libro`, `Producto`, `Usuario` |
+| 16 | OCP | Construir una habitación anexa sin destruir paredes | `Descuento`, `Exportador`, `CanalMensaje` |
+| 17 | LSP | Un nuevo líder que puede hacer las mismas tareas | `Figura`, `CuentaBancaria`, `Transporte` |
+| 18 | ISP | El cocinero no limpia mesas; el camarero no cocina | `Mantenimiento`, `OperacionBancaria`, `Vehiculo` |
+| 19 | DIP | Los gerentes definen estándares, no cómo cocinar | `ServicioAutenticacion`, `Almacenamiento`, `GeneradorReporte` |
